@@ -1,0 +1,49 @@
+{% extends 'shopping_app/base.html' %}
+
+{% block content %}
+<table>
+    <thead>
+        <tr>
+            <td>
+                Item
+            </td>
+            <td>
+                Rate
+            </td>
+            <td>
+                Quantity
+            </td>
+            <td>
+                Discount
+            </td>
+            <td>
+                Price
+            </td>
+        </tr>
+    </thead>
+    
+    {% for item in cart %}
+        <tr>
+            <td>
+                {{item.product_name}}
+            </td>
+            <td>
+                {{item.price}}
+            </td>
+            <td>
+                {{item.quantity_added}}
+            </td>
+            <td>
+                {{item.discount}}
+            </td>
+            <td>
+                {{item.price }}
+            </td>
+            <td>
+                <a href="{% url 'remove_item' item_id=item.id %}"><button>Remove</button></a>
+            </td>
+        </tr>
+    {% endfor %}
+        
+</table>
+{% endblock %}

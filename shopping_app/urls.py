@@ -19,7 +19,42 @@ from shopping_app import views
 urlpatterns = [
     path(
         '',
-        views.index,
+        views.signin,
         name='index'
     ),
+    path(
+        "signup",
+        views.signup,
+        name="signup"
+    ),
+    path(
+        "signin",
+        views.signin,
+        name="signin"
+    ),
+    path(
+        "homepage",
+        views.homepage,
+        name="homepage"
+    ),
+    path(
+        "cart",
+        views.view_cart,
+        name="cart"
+    ),
+    path(
+        "add_product",
+        views.add_product,
+        name="add_product"
+    ),
+    path(
+        "logout/",
+        views.logout,
+        name="logout"
+    ),
+    path(
+        r"remove_item/(?P<item_id>[0-9]+)",
+        views.remove_item,
+        name="remove_item"
+    )
 ]

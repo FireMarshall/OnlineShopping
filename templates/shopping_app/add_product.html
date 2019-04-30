@@ -1,0 +1,18 @@
+{% extends 'shopping_app/base.html' %}
+
+{% block content %}
+<div align="center">
+    {% if error_message %}
+    {{error_message}}
+    {% endif %}
+    <form action="{% url 'add_product' %}" method="post">
+        <br>
+        {% csrf_token %}
+        {% for field in product_form %}
+        <b>{{field.label}}: </b> {{field}} <br>
+        {% endfor %}
+        <br>
+        <input type="submit" value="Add Product">
+    </form>
+</div>
+{% endblock %}

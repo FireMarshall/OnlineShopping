@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Easy Buy</title>
+    <!-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">
+</head>
+
+<body>
+    <div align="center">
+        {% if error_message %}
+        {{error_message}}
+        {% endif %}
+        <form action="{% url 'signin' %}" method="POST">
+            <br>
+            {% csrf_token %}
+            {% for field in signin_form %}
+            <b>{{field.label}}: </b> {{field}} <br>
+            {% endfor %}
+            <br>
+            <input type="submit" value="Sign In">
+        </form>
+        <a href="{% url 'signup' %}"><button>Sign Up Instead</button></a>
+    </div>
+</body>
+
+</html>

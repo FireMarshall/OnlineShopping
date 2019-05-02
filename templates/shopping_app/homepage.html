@@ -1,5 +1,38 @@
 {% extends 'shopping_app/base.html' %}
 
 {% block content %}
-
+<br>
+<br>
+<a href="{% url 'new_arrival' %}"><button class="btn btn-primary"> New Arrival</button></a>
+<a href="{% url 'by_discount' %}"><button class="btn btn-primary"> Sort by Discount</button></a>
+<a href="{% url 'high_to_low' %}"><button class="btn btn-primary"> Sort Price: Low -> High</button></a>
+<a href="{% url 'low_to_high' %}"><button class="btn btn-primary"> Sort Price: High -> Low</button></a>
+<br>
+<div>
+    <br>
+    <table class="table">
+        {% for product in products %}
+            <tr>
+                <td>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtWFj381QdGDridOnLhXXN4KVkZV9oRNLUFHD4GyFVe8IThoddPg" alt="Some Img"> 
+                </td>
+                <td>
+                        <p>{{product.product_name}}</p>
+            <p style="font-size: 13pt">  &#x20B9 <del>        <i style="font-size: 11pt;" class="fa fa-strikethrough" aria-hidden="true">{{product.price}}   </i></del>  &#x20B9 {{product.selling_price}}</p>
+                        <p style="font-size: 13pt">{{product.discount}}%</p>
+                </td>
+                <td>
+                    <form action="{% url 'add_to_cart' item_name=product.product_name %}" method="POST">
+                        {% csrf_token %}
+                        <label for="{{product.product_name}}"> Quantity: </label>
+                        <input type="number" name="{{product.product_name}}" value="1" style="width:50px;">
+                        <br>
+                        <br>
+                        <input type="submit" value="Add to Cart">
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
 {% endblock %}

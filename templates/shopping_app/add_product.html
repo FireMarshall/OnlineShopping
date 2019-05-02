@@ -5,11 +5,20 @@
     {% if error_message %}
     {{error_message}}
     {% endif %}
+    
+    {% if message %}
+    <br>
+        {{message}}
+    <br>
+    {% endif %}
+        
     <form action="{% url 'add_product' %}" method="post">
         <br>
         {% csrf_token %}
         {% for field in product_form %}
-        <b>{{field.label}}: </b> {{field}} <br>
+        <b>{{field.label}}: </b> {{field}}
+        <br>
+        <br>
         {% endfor %}
         <br>
         <input type="submit" value="Add Product">

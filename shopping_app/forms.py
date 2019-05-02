@@ -13,7 +13,7 @@ class SignUpForm(forms.Form):
     mobile = forms.IntegerField(
         label="Mobile Number"
     )
-
+     
 
 class SignInForm(forms.Form):
 
@@ -33,9 +33,16 @@ class ProductForm(forms.Form):
         max_length=30, 
         label="Product Name"
     )
-    category = forms.CharField(
-        max_length=30,
-        label="Category"
+    category = forms.ChoiceField(
+        label="Category",
+        choices=[
+            (1, 'Men'),
+            (2, 'Women'),
+            (3, 'Kids'),
+            (4, 'Cosmetics'),
+            (5, 'Bags'),
+            (6, 'Watches')
+        ]
     )
     price = forms.IntegerField(
         label="Price"
@@ -45,4 +52,19 @@ class ProductForm(forms.Form):
     )
     quantity_available = forms.IntegerField(
         label="Quantity"
+    )
+
+
+class FilterForm(forms.Form):
+
+    category = forms.ChoiceField(
+        label="Category",
+        choices=[
+            (1, 'Men'),
+            (2, 'Women'),
+            (3, 'Kids'),
+            (4, 'Cosmetics'),
+            (5, 'Bags'),
+            (6, 'Watches')
+        ]
     )

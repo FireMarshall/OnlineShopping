@@ -1,5 +1,6 @@
 from django.db import models
-
+from django.utils.timezone import now
+import datetime
 # Create your models here.
 
 class User(models.Model):
@@ -19,7 +20,8 @@ class Product(models.Model):
     price = models.IntegerField()
     discount = models.IntegerField()
     quantity_available = models.IntegerField()
-    date_added = models.DateTimeField(auto_now=False, auto_now_add=True)
+    selling_price = models.IntegerField(default=0)
+    date_added = models.DateTimeField(default=datetime.datetime.now())
 
     def __str__(self):
         return self.product_name
@@ -34,4 +36,4 @@ class CartItem(models.Model):
     quantity_added = models.IntegerField()
 
     def __str__(self):
-        return (self.username, self.product_name)
+        return self.product_name

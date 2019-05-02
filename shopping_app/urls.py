@@ -5,55 +5,80 @@ The `urlpatterns` list routes URLs to views. For more information please see:
 Examples:
 Function views
     1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
+    2. Add a URL to urlpatterns:  url('', views.home, name='home')
 Class-based views
     1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
+    2. Add a URL to urlpatterns:  url('', Home.as_view(), name='home')
 Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+    1. Import the include() function: from django.urls import include, url
+    2. Add a URL to urlpatterns:  url('blog/', include('blog.urls'))
 """
-from django.urls import path
+from django.conf.urls import url
 from shopping_app import views
 
 urlpatterns = [
-    path(
-        '',
+    url(
+        r'^$',
         views.signin,
         name='index'
     ),
-    path(
-        "signup",
+    url(
+        r"^signup$",
         views.signup,
         name="signup"
     ),
-    path(
-        "signin",
+    url(
+        r"^signin$",
         views.signin,
         name="signin"
     ),
-    path(
-        "homepage",
+    url(
+        r"^homepage$",
         views.homepage,
         name="homepage"
     ),
-    path(
-        "cart",
+    url(
+        r"^cart$",
         views.view_cart,
         name="cart"
     ),
-    path(
-        "add_product",
+    url(
+        r"^add_product$",
         views.add_product,
         name="add_product"
     ),
-    path(
-        "logout/",
+    url(
+        r"^logout$",
         views.logout,
         name="logout"
     ),
-    path(
-        r"remove_item/(?P<item_id>[0-9]+)",
+    url(
+        r'^new_arrival/$',
+        views.new_arrival,
+        name='new_arrival'
+    ),
+    url(
+        r'^by_discount/$',
+        views.sort_by_discount,
+        name='by_discount'
+    ),
+    url(
+        r'^high_to_low/$',
+        views.sort_high_to_low,
+        name='high_to_low'
+    ),
+    url(
+        r'^low_to_high/$',
+        views.sort_low_to_high,
+        name='low_to_high'
+    ),
+    url(
+        r"^add_to_cart/(?P<item_name>[\w \d]+)$",
+        views.add_to_cart,
+        name="add_to_cart"
+    ),
+    url(
+        r"^remove_item/(?P<item_id>[0-9]+)$",
         views.remove_item,
         name="remove_item"
     )

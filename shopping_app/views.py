@@ -5,12 +5,14 @@ from shopping_app.models import CartItem, Product, User
 
 # Create your views here.
 is_logged_in = False
+is_admin = False
 current_username = ''
 categories = ['All', 'Men', 'Women', 'Kids', 'Cosmetics', 'Bags', 'Watches']
 sort_type = ["date_added", "discount", "Low-to-High", "High-to-Low"]
 
+
 def signin(request):
-    global is_logged_in, current_username
+    global is_logged_in, current_username, is_admin
     if request.method == "POST":
         form_data = SignInForm(request.POST)
         if form_data.is_valid():
@@ -21,6 +23,11 @@ def signin(request):
             if user_model:
                 if user_model[0].password == password:
                     is_logged_in = True
+                    current_username = 'admin'
+                    is_admin = name == 'admin'
+                    if is_admin:
+                        product_form = ProductForm()
+                        return render(request, 'shopping_app/add_product.html', {'product_form': product_form})
                     current_username = request.POST.get('name')
                     return homepage(request)
                 else:
@@ -53,6 +60,13 @@ def signup(request):
 
 
 def add_product(request):
+    if is_admin == False:
+        signin_form = SignInForm()
+        error_message = "You must sign in as admin to add product"
+        return render(request, 'shopping_app/signin.html', {
+                        'signin_form': signin_form,
+                        'error_message': error_message
+                    })
     if is_logged_in == False or current_username == '':
         return signin(request)
     if request.method == "POST":
@@ -61,7 +75,7 @@ def add_product(request):
         price = int(request.POST.get('price'))
         discount = int(request.POST.get('discount'))
         quantity_available = int(request.POST.get('quantity_available'))
-
+        img_link = request.POST.get('img_url')
         product = Product(
             product_name=product_name,
             category=category,
@@ -69,7 +83,8 @@ def add_product(request):
             discount=discount,
             quantity_available=quantity_available,
             selling_price = price - price*discount/100,
-            date_added=datetime.datetime.now()
+            date_added=datetime.datetime.now(),
+            img_link=img_link
         )
         product.save()
         message = 'Added Successfully'
@@ -77,21 +92,6 @@ def add_product(request):
         return render(request, 'shopping_app/add_product.html', {'product_form': product_form, 'message': message})
     product_form = ProductForm()
     return render(request, 'shopping_app/add_product.html', {'product_form': product_form})
-
-
-# def filter_products(request):
-#         if request.method == "POST":
-#         filter_form = request.POST
-#         if filter_form.is_valid():
-#             # filter_form = request.POST
-#             print(request.POST)
-#             filter_by = categories[int(request.POST.get('category')[0])]
-#             sort_by = sort_type[int(request.POST.get('sort_by'))]
-#             print(sort_by,filter_by)
-#             products = Product.objects.filter(category=filter_by).order_by('sort_by')
-#             # print(products)
-#             return render(request, 'shopping_app/homepage.html', {'products': products, 'filter_form':filter_form})
-#     products = Product.objects.all()
 
 
 def homepage(request):
@@ -111,16 +111,16 @@ def homepage(request):
                 param = 'selling_price'
             else:
                 param = '-selling_price'
-            
+
             if filter_by == 'All':
                 products = Product.objects.order_by(param)
             else:
                 products = Product.objects.filter(category=filter_by).order_by(param)
 
-            return render(request, 'shopping_app/homepage.html', {'products': products, 'filter_form':filter_form})
+            return render(request, 'shopping_app/homepage.html', {'products': products, 'filter_form': filter_form})
     products = Product.objects.all()
     filter_form = FilterForm()
-    return render(request, 'shopping_app/homepage.html', {'products': products, 'filter_form':filter_form})
+    return render(request, 'shopping_app/homepage.html', {'products': products, 'filter_form': filter_form})
 
 
 def add_to_cart(request, item_name):

@@ -1,41 +1,46 @@
 {% extends 'shopping_app/base.html' %}
+{% load crispy_forms_tags %}
 
 {% block content %}
-<br>
-<br>
-
-<form action="{% url 'homepage' %}" method="post">
-    {% csrf_token %}
-    {{filter_form}}
-    <input type="submit" value="Filter">
-</form>
-
-<br>
-<div>
     <br>
-    <table class="table">
-        {% for product in products %}
-            <tr>
-                <td>
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtWFj381QdGDridOnLhXXN4KVkZV9oRNLUFHD4GyFVe8IThoddPg" alt="Some Img"> 
-                </td>
-                <td>
-                        <p>{{product.product_name}}</p>
-            <p style="font-size: 13pt">  &#x20B9 <del>        <i style="font-size: 11pt;" class="fa fa-strikethrough" aria-hidden="true">{{product.price}}   </i></del>  &#x20B9 {{product.selling_price}}</p>
-                        <p style="font-size: 13pt">{{product.discount}}%</p>
-                </td>
-                <td>
-                    <form action="{% url 'add_to_cart' item_name=product.product_name %}" method="POST">
-                        {% csrf_token %}
-                        <label for="{{product.product_name}}"> Quantity: </label>
-                        <input type="number" name="{{product.product_name}}" value="1" style="width:50px;">
-                        <br>
-                        <br>
-                        <input type="submit" value="Add to Cart">
-                    </form>
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
-</div>
+    <br>
+
+    <div class="container" style="width:30%;">
+        <form action="{% url 'homepage' %}" method="post">
+            {% csrf_token %}
+            {{ filter_form | crispy }}
+            <input class="btn btn-primary" style="margin-left: 40%" type="submit" value="Filter">
+        </form>
+    </div>
+    <br>
+    <div>
+        <br>
+        <table class="table">
+            {% for product in products %}
+                <tr>
+                    <td>
+                        <img style="margin-left:40%; width: 200px; height: 200px" src={{ product.img_link }}
+                             alt="Some Img">
+                    </td>
+                    <td>
+                        <p>{{ product.product_name }}</p>
+                        <p style="font-size: 13pt"> &#x20B9
+                            <del><s>{{ product.price }}</s></del>
+                            &#x20B9 {{ product.selling_price }}</p>
+                        <p style="font-size: 13pt">{{ product.discount }}%</p>
+                    </td>
+                    <td>
+                        <form action="{% url 'add_to_cart' item_name=product.product_name %}" method="POST">
+                            {% csrf_token %}
+                            <label for="{{ product.product_name }}"> Quantity: </label>
+                            <input class="form-control" type="number" name="{{ product.product_name }}" value="1" style="width:50px;">
+                            <br>
+                            <br>
+                            <input class="btn btn-success" type="submit" value="Add to Cart">
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
 {% endblock %}

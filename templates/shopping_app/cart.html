@@ -1,54 +1,67 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+      integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 {% extends 'shopping_app/base.html' %}
 
 {% block content %}
-<table>
-    <thead>
+    <style>
+        th {
+            font-weight: bold;
+        }
+
+    </style>
+
+
+    <br><br>
+    <table class="table-striped table-hover table" style="width: 70%; margin-left: 20%;">
+        <thead>
         <tr>
-            <td>
+            <th>
                 Item
-            </td>
-            <td>
+            </th>
+            <th>
                 Rate
-            </td>
-            <td>
+            </th>
+            <th>
                 Quantity
-            </td>
-            <td>
+            </th>
+            <th>
                 Discount
-            </td>
-            <td>
+            </th>
+            <th>
                 Price
-            </td>
+            </th>
         </tr>
-    </thead>
-    
-    {% for item in cart_items %}
-        <tr>
-            <td>
-                {{item.product_name}}
-            </td>
-            <td>
-                {{item.price}}
-            </td>
-            <td>
-                {{item.quantity_added}}
-            </td>
-            <td>
-                {{item.discount}}
-            </td>
-            <td>
-                {{item.price }}
-            </td>
-            <td>
-                <a href="{% url 'remove_item' item_name=item.product_name %}"><button>Remove</button></a>
-            </td>
-        </tr>
-    {% endfor %}
-        
-</table>
-<p>
-    <h2>
-        Total price : {{total}}
+        </thead>
+
+        {% for item in cart_items %}
+            <tr>
+                <td>
+                    {{ item.product_name }}
+                </td>
+                <td>
+                    {{ item.price }}
+                </td>
+                <td>
+                    {{ item.quantity_added }}
+                </td>
+                <td>
+                    {{ item.discount }}
+                </td>
+                <td>
+                    {{ item.total_price }}
+                </td>
+                <td>
+                    <a href="{% url 'remove_item' item_name=item.product_name %}">
+                        <button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+
+    </table>
+    <p>
+    <h2 class="jumbotron" style="margin-left: 65%; width: 25%">
+        Total price : {{ total }}
     </h2>
-</p>
+    </p>
 {% endblock %}

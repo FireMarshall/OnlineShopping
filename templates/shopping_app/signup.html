@@ -1,32 +1,39 @@
 <!DOCTYPE html>
+{% load crispy_forms_tags %}
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <title>Easy Buy</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/superhero/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-LS4/wo5Z/8SLpOLHs0IbuPAGOWTx30XSoZJ8o7WKH0UJhRpjXXTpODOjfVnNjeHu" crossorigin="anonymous">
     <!-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">
+    {#    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">#}
 </head>
 
-<body>
-    <div>
-        {% if error_message %}
-        {{error_message}}
-        {% endif %}
-        <form action="{% url 'signup' %}" method="POST">
+<body background="https://martechtoday.com/wp-content/uploads/2018/08/ecommerce-shopping-cart-keyboard-ss-1920_kgq71w.jpg">
+<div class="jumbotron" style="width: 30%; margin-left: 35%; margin-top: 3%;">
+
+    <form action="{% url 'signup' %}" method="POST">
+        <br>
+        {% csrf_token %}
+    {% if error_message %}
+        <h3>{{ error_message }}</h3>
+    {% endif %}
+        {% for field in signup_form %}
+            {{ field | as_crispy_field }}
             <br>
-            {% csrf_token %}
-            {% for field in signup_form %}
-                <b>{{field.label}}: </b> {{field}}
-                <br>
-                <br>
-            {% endfor %}
             <br>
-            <input type="submit" value="Sign Up">
-        </form>
-        <a href="{% url 'signin' %}"><button>Sign In Instead</button></a>
-    </div>
+        {% endfor %}
+        <br>
+        <input type="submit" value="Sign Up" class="btn btn-primary" style="margin-left: 40%">
+        <br><br>
+    </form>
+    <a href="{% url 'signin' %}" style="margin-left: 33%">
+        <button class="btn btn-secondary">Sign In Instead</button>
+    </a>
+</div>
 </body>
 
 </html>

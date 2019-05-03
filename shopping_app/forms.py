@@ -9,7 +9,8 @@ class SignUpForm(forms.Form):
     password = forms.CharField(
         max_length=12,
         widget=forms.PasswordInput,
-        label="Password"
+        label="Password",
+
     )
     mobile = forms.IntegerField(
         label="Mobile Number"
@@ -24,7 +25,9 @@ class SignInForm(forms.Form):
     )
     password = forms.CharField(
         max_length=12,
-        label="Password"
+        label="Password",
+        widget=forms.PasswordInput(),
+
     )
 
 
@@ -54,7 +57,9 @@ class ProductForm(forms.Form):
     quantity_available = forms.IntegerField(
         label="Quantity"
     )
-
+    img_link = forms.URLField(
+        label="Product Image URL"
+    )
 
 class FilterForm(forms.Form):
 

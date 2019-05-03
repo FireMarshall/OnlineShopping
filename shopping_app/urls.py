@@ -53,12 +53,12 @@ urlpatterns = [
         name="logout"
     ),
     url(
-        r"^add_to_cart/(?P<item_name>[\w \d]+)$",
+        r"^add_to_cart/(?P<item_name>[\w \d\W\D\s\S]+)$",
         views.add_to_cart,
         name="add_to_cart"
     ),
     url(
-        r"^remove_item/(?P<item_name>[\w \d]+)$",
+        r"^remove_item/(?P<item_name>[\w \d\W\D\s\S]+)$",
         views.remove_item,
         name="remove_item"
     )

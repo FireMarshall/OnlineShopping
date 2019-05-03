@@ -8,6 +8,7 @@ class SignUpForm(forms.Form):
     )
     password = forms.CharField(
         max_length=12,
+        widget=forms.PasswordInput,
         label="Password"
     )
     mobile = forms.IntegerField(
@@ -58,13 +59,23 @@ class ProductForm(forms.Form):
 class FilterForm(forms.Form):
 
     category = forms.ChoiceField(
-        label="Category",
+        label='Category',
         choices=[
+            (0, 'All'),
             (1, 'Men'),
             (2, 'Women'),
             (3, 'Kids'),
             (4, 'Cosmetics'),
             (5, 'Bags'),
             (6, 'Watches')
+        ]
+    )
+    sort_by = forms.ChoiceField(
+        label='Sort By',
+        choices=[
+            (0, 'New Arrival'),
+            (1, 'Discount'),
+            (2, 'Low to High'),
+            (3, 'High to Low'),
         ]
     )

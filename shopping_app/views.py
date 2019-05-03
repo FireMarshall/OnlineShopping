@@ -1,13 +1,13 @@
 from django.shortcuts import render
 import datetime
-from shopping_app.forms import ProductForm, SignInForm, SignUpForm
+from shopping_app.forms import ProductForm, SignInForm, SignUpForm, FilterForm
 from shopping_app.models import CartItem, Product, User
 
 # Create your views here.
 is_logged_in = False
 current_username = ''
-categories = ['', 'Men', 'Women', 'Kids', 'Cosmetics', 'Bags', 'Watches']
-# sort_by = ['', "New Arrival", "Discount", "Low-to-High", "High-to-Low"]
+categories = ['All', 'Men', 'Women', 'Kids', 'Cosmetics', 'Bags', 'Watches']
+sort_type = ["date_added", "discount", "Low-to-High", "High-to-Low"]
 
 def signin(request):
     global is_logged_in, current_username
@@ -53,9 +53,8 @@ def signup(request):
 
 
 def add_product(request):
-    if is_logged_in == False:
+    if is_logged_in == False or current_username == '':
         return signin(request)
-
     if request.method == "POST":
         product_name = request.POST.get('product_name')
         category = categories[int(request.POST.get('category'))]
@@ -80,51 +79,64 @@ def add_product(request):
     return render(request, 'shopping_app/add_product.html', {'product_form': product_form})
 
 
+# def filter_products(request):
+#         if request.method == "POST":
+#         filter_form = request.POST
+#         if filter_form.is_valid():
+#             # filter_form = request.POST
+#             print(request.POST)
+#             filter_by = categories[int(request.POST.get('category')[0])]
+#             sort_by = sort_type[int(request.POST.get('sort_by'))]
+#             print(sort_by,filter_by)
+#             products = Product.objects.filter(category=filter_by).order_by('sort_by')
+#             # print(products)
+#             return render(request, 'shopping_app/homepage.html', {'products': products, 'filter_form':filter_form})
+#     products = Product.objects.all()
+
+
 def homepage(request):
-    products = Product.objects.all()
-    return render(request, 'shopping_app/homepage.html', {'products': products})
-
-
-def new_arrival(request):
-    if is_logged_in == False:
+    if is_logged_in == False or current_username == '':
         return signin(request)
+    if request.method == "POST":
+        filter_form = FilterForm(request.POST)
+        if filter_form.is_valid():
+            filter_by = categories[int(request.POST.get('category')[0])]
+            sort_by = int(request.POST.get('sort_by')[0])
+            print(sort_by,filter_by)
+            if sort_by == 0:
+                param = 'date_added'
+            elif sort_by == 1:
+                param = '-discount'
+            elif sort_by == 2:
+                param = 'selling_price'
+            else:
+                param = '-selling_price'
+            
+            if filter_by == 'All':
+                products = Product.objects.order_by(param)
+            else:
+                products = Product.objects.filter(category=filter_by).order_by(param)
+
+            return render(request, 'shopping_app/homepage.html', {'products': products, 'filter_form':filter_form})
     products = Product.objects.all()
-    return render(request, 'shopping_app/homepage.html', {'products': products})
-
-
-def sort_by_discount(request):
-    if is_logged_in == False:
-        return signin(request)
-    products = Product.objects.all()
-    return render(request, 'shopping_app/homepage.html', {'products': products})
-
-
-def sort_high_to_low(request):
-    if is_logged_in == False:
-        return signin(request)
-    products = Product.objects.all()
-    return render(request, 'shopping_app/homepage.html', {'products': products})
-
-
-def sort_low_to_high(request):
-    if is_logged_in == False:
-        return signin(request)
-    products = Product.objects.all()
-    return render(request, 'shopping_app/homepage.html', {'products': products})
+    filter_form = FilterForm()
+    return render(request, 'shopping_app/homepage.html', {'products': products, 'filter_form':filter_form})
 
 
 def add_to_cart(request, item_name):
-    if is_logged_in == False:
+    if is_logged_in == False or current_username == '':
         return signin(request)
     if request.method == "POST":
-        quantity = request.POST.get(item_name)
+        quantity = int(request.POST.get(item_name))
         product = Product.objects.filter(product_name=item_name)[0]
         cart_item = CartItem(
             username=current_username,
             product_name=product.product_name,
             category=product.category,
-            price=product.selling_price,
+            price=product.price,
+            selling_price=product.selling_price,
             discount=product.discount,
+            total_price=product.selling_price*quantity,
             quantity_added=quantity
         )
         cart_item.save()
@@ -134,21 +146,29 @@ def add_to_cart(request, item_name):
 
 
 def view_cart(request):
-    if is_logged_in == False:
+    if is_logged_in == False or current_username == '':
         return signin(request)
     cart_items = CartItem.objects.filter(username=current_username)
-    return render(request, 'shopping_app/cart.html', {'cart_items': cart_items})
+    items = CartItem.objects.filter(username=current_username)
+    if items:
+        total = sum(map(lambda item: item.total_price, items))
+    else:
+        total = 0
+    return render(request, 'shopping_app/cart.html', {'cart_items': cart_items, 'total': total})
 
 
-def remove_item(request, item_id):
-    if is_logged_in == False:
+def remove_item(request, item_name):
+    if is_logged_in == False or current_username == '':
         return signin(request)
-
+    cart_item = CartItem.objects.filter(username=current_username, product_name=item_name)[0]
+    product = Product.objects.filter(product_name=item_name)[0]
+    product.quantity_available += cart_item.quantity_added
+    product.save()
+    cart_item.delete()
     return view_cart(request)
 
 
 def logout(request):
-
     is_logged_in = False
     current_username = ''
     return signin(request)

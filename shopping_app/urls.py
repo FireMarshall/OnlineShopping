@@ -53,32 +53,12 @@ urlpatterns = [
         name="logout"
     ),
     url(
-        r'^new_arrival/$',
-        views.new_arrival,
-        name='new_arrival'
-    ),
-    url(
-        r'^by_discount/$',
-        views.sort_by_discount,
-        name='by_discount'
-    ),
-    url(
-        r'^high_to_low/$',
-        views.sort_high_to_low,
-        name='high_to_low'
-    ),
-    url(
-        r'^low_to_high/$',
-        views.sort_low_to_high,
-        name='low_to_high'
-    ),
-    url(
         r"^add_to_cart/(?P<item_name>[\w \d]+)$",
         views.add_to_cart,
         name="add_to_cart"
     ),
     url(
-        r"^remove_item/(?P<item_id>[0-9]+)$",
+        r"^remove_item/(?P<item_name>[\w \d]+)$",
         views.remove_item,
         name="remove_item"
     )

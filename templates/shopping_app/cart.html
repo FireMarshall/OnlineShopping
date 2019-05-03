@@ -40,10 +40,15 @@
                 {{item.price }}
             </td>
             <td>
-                <a href="{% url 'remove_item' item_id=item.id %}"><button>Remove</button></a>
+                <a href="{% url 'remove_item' item_name=item.product_name %}"><button>Remove</button></a>
             </td>
         </tr>
     {% endfor %}
         
 </table>
+<p>
+    <h2>
+        Total price : {{total}}
+    </h2>
+</p>
 {% endblock %}

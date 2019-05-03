@@ -3,10 +3,13 @@
 {% block content %}
 <br>
 <br>
-<a href="{% url 'new_arrival' %}"><button class="btn btn-primary"> New Arrival</button></a>
-<a href="{% url 'by_discount' %}"><button class="btn btn-primary"> Sort by Discount</button></a>
-<a href="{% url 'high_to_low' %}"><button class="btn btn-primary"> Sort Price: Low -> High</button></a>
-<a href="{% url 'low_to_high' %}"><button class="btn btn-primary"> Sort Price: High -> Low</button></a>
+
+<form action="{% url 'homepage' %}" method="post">
+    {% csrf_token %}
+    {{filter_form}}
+    <input type="submit" value="Filter">
+</form>
+
 <br>
 <div>
     <br>

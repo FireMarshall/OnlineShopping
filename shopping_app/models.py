@@ -17,23 +17,27 @@ class Product(models.Model):
 
     product_name = models.CharField(max_length=30, blank=False, null=False)
     category = models.CharField(max_length=30, blank=False, null=False)
-    price = models.IntegerField()
-    discount = models.IntegerField()
-    quantity_available = models.IntegerField()
+    price = models.IntegerField(default=0)
+    discount = models.IntegerField(default=0)
+    quantity_available = models.IntegerField(default=0)
     selling_price = models.IntegerField(default=0)
     date_added = models.DateTimeField(default=datetime.datetime.now())
+    img_link = models.URLField(default="www.google.com")
 
     def __str__(self):
         return self.product_name
+
 
 class CartItem(models.Model):
 
     username = models.CharField(max_length=30, blank=False, null=False)
     product_name = models.CharField(max_length=30, blank=False, null=False)
     category = models.CharField(max_length=30, blank=False, null=False)
-    price = models.IntegerField()
-    discount = models.IntegerField()
-    quantity_added = models.IntegerField()
+    price = models.IntegerField(default=0)
+    discount = models.IntegerField(default=0)
+    selling_price = models.IntegerField(default=0)
+    total_price = models.IntegerField(default=0)
+    quantity_added = models.IntegerField(default=0)
 
     def __str__(self):
         return self.product_name
